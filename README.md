@@ -6,8 +6,8 @@
 
 |Knob|Function|
 |-|-|
-|A|TBD|
-|B|TBD|
+|A|Tone|
+|B|Gain|
 
 Please report any bugs or issues you might encounter and I'll try to resolve them as time permits!
 
@@ -17,7 +17,7 @@ YouTube Demo: TBD
 
 ## Status
 
-> Version 1.0
+> Version 1.1
 
 |Logue|Tested|Status|
 |-|-|-|
