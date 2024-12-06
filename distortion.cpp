@@ -7,11 +7,12 @@
 static bool rateChange, gainChange;
 static uint8_t sampleLoop;
 static uint16_t gain, rateLength;
-static float sampleSumL, sampleSumR;
+static float sampleSumL, sampleSumR, volReducer;
 
 static __sdram float audioSample[BUFFER_LEN];
 static std::atomic<uint16_t> rateVal(0);
 static std::atomic<uint16_t> gainVal(0);
+static std::atomic<float> volReducerVal(0);
 
 //Initialization process
 void MODFX_INIT(uint32_t platform, uint32_t api)
@@ -19,12 +20,14 @@ void MODFX_INIT(uint32_t platform, uint32_t api)
   buf_clr_f32(audioSample, BUFFER_LEN);
   gain = 0;
   rateLength = 1;
+  volReducer = 1;
 
   rateChange = false;
   gainChange = false;
 
   rateVal = 0;
   gainVal = 0;
+  volReducerVal = 0;
 
   sampleLoop = 0;
   sampleSumL = 0.0f;
@@ -44,8 +47,8 @@ void MODFX_PROCESS(const float *main_xn, float *main_yn,
     {  
       if(rateLength < 1) // No Tone
       {
-        main_yn[i * 2]     = clip1m1f(main_xn[i * 2]     * gain) * 0.95;
-        main_yn[i * 2 + 1] = clip1m1f(main_xn[i * 2 + 1] * gain) * 0.95;
+        main_yn[i * 2]     = clip1m1f(main_xn[i * 2]     * gain) * volReducer;
+        main_yn[i * 2 + 1] = clip1m1f(main_xn[i * 2 + 1] * gain) * volReducer;
       }
       else // Tone
       {
@@ -53,8 +56,8 @@ void MODFX_PROCESS(const float *main_xn, float *main_yn,
         {
           sampleLoop = 0;
         }
-        audioSample[sampleLoop * 2]     = clip1m1f(main_xn[i * 2]     * gain) * 0.95;
-        audioSample[sampleLoop * 2 + 1] = clip1m1f(main_xn[i * 2 + 1] * gain) * 0.95;
+        audioSample[sampleLoop * 2]     = clip1m1f(main_xn[i * 2]     * gain) * volReducer;
+        audioSample[sampleLoop * 2 + 1] = clip1m1f(main_xn[i * 2 + 1] * gain) * volReducer;
         sampleLoop++;
 
         sampleSumL = 0.0f;
@@ -78,6 +81,7 @@ void MODFX_PROCESS(const float *main_xn, float *main_yn,
       if(gainChange)
       {
         gain = gainVal;
+        volReducer = volReducerVal;
         gainChange = false;
       }
     }
@@ -99,6 +103,7 @@ void MODFX_PARAM(uint8_t index, int32_t value)
     //B Knob. Gain needs to be at least 1 or you will get silence.
     case k_user_modfx_param_depth:
       gainVal = (uint16_t)(valf * 300) + 1;
+      volReducerVal = clip0f(0.11f - valf) + 0.10f; //gain = 0 then == 1 gain = 1 then == 0.10f
       gainChange = true;
       break;
     default:
