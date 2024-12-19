@@ -1,6 +1,6 @@
 # Korg Logue Distortion Mod FX
 
->Distorts yer stuffs! 
+>Multiplies the input by the Gain value.
 
 ## Functionality
 
@@ -17,18 +17,18 @@ YouTube Demo: TBD
 
 ## Status
 
-> Version 1.1
+> Version 1.0
 
 |Logue|Tested|Status|
 |-|-|-|
-|NTS-1|Yes|Under Construction|
+|NTS-1|Yes|Working|
 |NTS-1 mkII|No|Needs Testing|
 |NTS-3|No|Needs Testing|
-|minilogue xd|Testing|In Progress|
+|minilogue xd|No|Needs Testing|
 |prologue|No|Needs Testing|
 
 Please reach out if you're interested in testing!
 
 ---
 
-Previous compiled binaries: [mkoussa.github.io/](https://mkoussa.github.io/) (TBD)
+Previous compiled binaries: [https://mkelixir.gigalixirapp.com/loguesdk/distortionmodeffect](https://mkelixir.gigalixirapp.com/loguesdk/distortionmodeffect)
